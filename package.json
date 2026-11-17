@@ -20,7 +20,7 @@
     "verdaccio": "^6.10.7"
   },
   "engines": {
-    "node": "^26.5.1",
+    "node": "^24.5.0",
     "npm": "please-use-yarn",
     "yarn": ">=4.0.2"
   },
@@ -82,3 +82,4 @@
     "endOfLine": "lf"
   }
 }
+
