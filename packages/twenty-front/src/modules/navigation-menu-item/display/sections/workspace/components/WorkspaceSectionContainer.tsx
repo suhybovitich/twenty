@@ -1,15 +1,14 @@
-import { styled } from '@linaria/react';
 import React, { lazy, Suspense } from 'react';
-import { isDefined } from 'twenty-shared/utils';
 import { doNotTranslate } from 'twenty-shared/i18n';
-import { themeCssVariables } from 'twenty-ui/theme';
 import { type NavigationMenuItem } from '~/generated-metadata/graphql';
 
 import { isLayoutCustomizationModeEnabledState } from '@/layout-customization/states/isLayoutCustomizationModeEnabledState';
 import { type NavigationMenuItemClickParams } from '@/navigation-menu-item/display/hooks/useNavigationMenuItemSectionItems';
 import { useReadableNavigationMenuItems } from '@/navigation-menu-item/display/hooks/useReadableNavigationMenuItems';
 import { getObjectMetadataForNavigationMenuItem } from '@/navigation-menu-item/display/object/utils/getObjectMetadataForNavigationMenuItem';
+import { groupNavigationMenuItemsByContainer } from '@/navigation-menu-item/common/utils/groupNavigationMenuItemsByContainer';
 import { NavigationMenuItemSection } from '@/navigation-menu-item/display/sections/components/NavigationMenuItemSection';
+import { StyledNavigationMenuItemSectionContentGapOffset } from '@/navigation-menu-item/display/sections/components/StyledNavigationMenuItemSectionContentGapOffset';
 import { WorkspaceSectionListReadOnly } from '@/navigation-menu-item/display/sections/workspace/components/WorkspaceSectionListReadOnly';
 import type { EditModeProps } from '@/object-metadata/components/EditModeProps';
 import { WorkspaceSectionListEditModeFallback } from '@/object-metadata/components/WorkspaceSectionListEditModeFallback';
@@ -18,16 +17,13 @@ import { type EnrichedObjectMetadataItem } from '@/object-metadata/types/Enriche
 import { useNavigationSection } from '@/ui/navigation/navigation-drawer/hooks/useNavigationSection';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { viewsSelector } from '@/views/states/selectors/viewsSelector';
+import { useWorkspaceSidebarRootContainerId } from '@/navigation-menu-item/display/hooks/useWorkspaceSidebarRootContainerId';
 
 const LazyWorkspaceSectionListDndKit = lazy(() =>
   import('@/navigation-menu-item/display/sections/workspace/components/WorkspaceSectionListDndKit').then(
     (m) => ({ default: m.WorkspaceSectionListDndKit }),
   ),
 );
-
-const StyledWorkspaceSectionContentGapOffset = styled.div`
-  margin-top: calc(-1 * ${themeCssVariables.betweenSiblingsGap});
-`;
 
 type WorkspaceSectionContainerProps = {
   sectionTitle: string;
@@ -57,20 +53,13 @@ export const WorkspaceSectionContainer = ({
   const views = useAtomStateValue(viewsSelector);
 
   const objectMetadataItems = useAtomStateValue(objectMetadataItemsSelector);
-  const flatItems = items.filter((item) => !isDefined(item.folderId));
-
-  const folderChildrenById = items.reduce<Map<string, NavigationMenuItem[]>>(
-    (acc, item) => {
-      const folderId = item.folderId;
-      if (isDefined(folderId)) {
-        const children = acc.get(folderId) ?? [];
-        children.push(item);
-        acc.set(folderId, children);
-      }
-      return acc;
-    },
-    new Map(),
-  );
+  // TODO(@thomtrp): remove once IS_CUSTOMIZABLE_SIDEBAR_ENABLED is on for every workspace
+  const workspaceSidebarRootContainerId = useWorkspaceSidebarRootContainerId();
+  const { topLevelItems: flatItems, folderChildrenById } =
+    groupNavigationMenuItemsByContainer({
+      items,
+      containerId: workspaceSidebarRootContainerId,
+    });
 
   const { filteredTopLevelItems, filteredFolderChildrenById } =
     useReadableNavigationMenuItems({
@@ -118,9 +107,9 @@ export const WorkspaceSectionContainer = ({
       rightIcon={rightIcon}
       alwaysShowRightIcon={isLayoutCustomizationModeEnabled}
       contentWrapper={(children) => (
-        <StyledWorkspaceSectionContentGapOffset>
+        <StyledNavigationMenuItemSectionContentGapOffset>
           {children}
-        </StyledWorkspaceSectionContentGapOffset>
+        </StyledNavigationMenuItemSectionContentGapOffset>
       )}
     >
       {isLayoutCustomizationModeEnabled ? (
@@ -134,6 +123,7 @@ export const WorkspaceSectionContainer = ({
           }
         >
           <LazyWorkspaceSectionListDndKit
+            containerId={workspaceSidebarRootContainerId ?? undefined}
             filteredItems={workspaceOrphanItemsForSection}
             getEditModeProps={getEditModeProps}
             folderChildrenById={folderChildrenById}

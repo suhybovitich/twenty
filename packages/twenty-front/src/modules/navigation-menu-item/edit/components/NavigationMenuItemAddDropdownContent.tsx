@@ -3,6 +3,7 @@ import { type NavigationMenuItemSection } from '@/navigation-menu-item/common/ty
 import { NavigationMenuItemInsertionPreviewEffect } from '@/navigation-menu-item/edit/effect-components/NavigationMenuItemInsertionPreviewEffect';
 import { useNavigationMenuItemAddOptions } from '@/navigation-menu-item/edit/hooks/useNavigationMenuItemAddOptions';
 import { type NavigationMenuItemAddStep } from '@/navigation-menu-item/edit/types/NavigationMenuItemAddStep';
+import { getNavigationMenuItemTabId } from '@/navigation-menu-item/common/utils/getNavigationMenuItemTabId';
 import { navigationMenuItemIdToRenameState } from '@/navigation-menu-item/common/states/navigationMenuItemIdToRenameState';
 import { NavigationMenuItemSelectableItem } from '@/navigation-menu-item/edit/components/NavigationMenuItemSelectableItem';
 import { type NavigationMenuItemOption } from '@/navigation-menu-item/edit/types/NavigationMenuItemOption';
@@ -36,7 +37,7 @@ const STEP_BY_PAGE: Partial<Record<string, Step>> = {
 type NavigationMenuItemAddDropdownContentProps = {
   dropdownId: string;
   section: NavigationMenuItemSection;
-  folderId?: string;
+  parentId?: string;
   position?: number;
   onClose: () => void;
 };
@@ -44,7 +45,7 @@ type NavigationMenuItemAddDropdownContentProps = {
 export const NavigationMenuItemAddDropdownContent = ({
   dropdownId,
   section,
-  folderId,
+  parentId,
   position,
   onClose,
 }: NavigationMenuItemAddDropdownContentProps) => {
@@ -66,8 +67,20 @@ export const NavigationMenuItemAddDropdownContent = ({
   const insertionIndex =
     position ??
     currentItems.filter(
-      (item) => (item.folderId ?? null) === (folderId ?? null),
+      (item) => (item.parentId ?? null) === (parentId ?? null),
     ).length;
+
+  const targetTabId = getNavigationMenuItemTabId({
+    parentId,
+    items: currentItems,
+  });
+  const currentTabItems = currentItems.filter(
+    (item) =>
+      getNavigationMenuItemTabId({
+        parentId: item.parentId,
+        items: currentItems,
+      }) === targetTabId,
+  );
 
   const navigate = (next: Step) => {
     goToPage(next);
@@ -76,7 +89,7 @@ export const NavigationMenuItemAddDropdownContent = ({
   };
   const addItem = (input: NewNavigationMenuItemInput) => {
     const itemId = createItem(input, {
-      targetFolderId: folderId ?? null,
+      targetFolderId: parentId ?? null,
       targetIndex: position,
     });
     onClose();
@@ -97,8 +110,8 @@ export const NavigationMenuItemAddDropdownContent = ({
     step,
     search,
     objectId,
-    folderId,
-    currentItems,
+    parentId,
+    currentItems: currentTabItems,
     isSearchingAllItems,
     addItem,
     navigateToStep: navigate,
@@ -202,7 +215,7 @@ export const NavigationMenuItemAddDropdownContent = ({
       <NavigationMenuItemInsertionPreviewEffect
         dropdownId={dropdownId}
         section={section}
-        folderId={folderId ?? null}
+        parentId={parentId ?? null}
         index={insertionIndex}
       />
       <Dropdown.Page id={page} type="picker">

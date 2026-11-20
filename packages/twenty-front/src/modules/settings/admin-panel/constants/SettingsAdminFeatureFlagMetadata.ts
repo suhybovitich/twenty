@@ -36,6 +36,10 @@ export const SETTINGS_ADMIN_FEATURE_FLAG_METADATA: Record<
     label: msg`Import recurring meetings 90 days ahead`,
     description: msg`Import occurrences of recurring Google Calendar meetings up to 90 days ahead only, and import later occurrences as they come within 90 days.`,
   },
+  [FeatureFlagKey.IS_CUSTOMIZABLE_SIDEBAR_ENABLED]: {
+    label: msg`Customizable sidebar`,
+    description: msg`Show sidebar tabs and sections.`,
+  },
   [FeatureFlagKey.IS_AI_CHAT_COMPONENT_BUILDER_ENABLED]: {
     label: msg`AI chat component builder`,
     description: msg`Create and preview frontend components in AI chat before adding them to the Workspace app.`,
@@ -92,8 +96,8 @@ export const SETTINGS_ADMIN_FEATURE_FLAG_METADATA: Record<
     label: msg`Group tabs`,
     description: msg`Let grouped table and list views show their groups as tabs, one group at a time. Enable after the instance upgrade completes.`,
   },
-  [FeatureFlagKey.IS_HTTP_EGRESS_LAMBDA_ENABLED]: {
-    label: msg`HTTP requests in the logic function runtime`,
-    description: msg`Send workflow HTTP requests, test requests and the AI agent HTTP tool through the logic function driver, which runs them in an isolated Lambda when logic functions run in Lambda.`,
+  [FeatureFlagKey.IS_LOOKUP_COLUMNS_ENABLED]: {
+    label: msg`Lookup columns`,
+    description: msg`Add table columns that show a field of a related record, such as a person's company industry. Enable after the instance upgrade completes.`,
   },
 };

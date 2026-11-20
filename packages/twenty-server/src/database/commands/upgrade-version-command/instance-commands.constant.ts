@@ -307,6 +307,17 @@ import { AddViewFieldIsCanonicalFastInstanceCommand } from 'src/database/command
 import { AddIsInternalImportEnabledToWorkspaceSlowInstanceCommand } from 'src/database/commands/upgrade-version-command/2-59/2-59-instance-command-slow-1794588217126-add-is-internal-import-enabled-to-workspace';
 import { BackfillFieldMetadataOptionRowsFromStoredOptionsFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-59/2-59-instance-command-fast-1794590652080-backfill-field-metadata-option-rows-from-stored-options';
 import { AddViewFieldRelationTargetFieldMetadataIdFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-59/2-59-instance-command-fast-1794606690417-add-view-field-relation-target-field-metadata-id';
+import { RenameNavigationMenuItemFolderIdToParentIdFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-60/2-60-instance-command-fast-1794839679151-rename-navigation-menu-item-folder-id-to-parent-id';
+import { AddTabAndSectionNavigationMenuItemsFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-60/2-60-instance-command-fast-1794921429000-add-tab-and-section-navigation-menu-items';
+import { AddIsSystemSideEffectToRoleAndRoleTargetFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-60/2-60-instance-command-fast-1794922746000-add-is-system-side-effect-to-role-and-role-target';
+import { AllowSystemSideEffectRoleTargetsPerUserWorkspaceSlowInstanceCommand } from 'src/database/commands/upgrade-version-command/2-60/2-60-instance-command-slow-1794922746001-allow-system-side-effect-role-targets-per-user-workspace';
+import { AddWorkflowVersionCoreWorkflowForeignKeySlowInstanceCommand } from 'src/database/commands/upgrade-version-command/2-60/2-60-instance-command-slow-1794926980299-add-workflow-version-core-workflow-foreign-key';
+import { DropJobConfigFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-61/2-61-instance-command-fast-1794932308059-drop-job-config';
+import { AddAgentPrivacyFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-61/2-61-instance-command-fast-1795109265317-add-agent-privacy';
+import { AddRequestedRoleIdToApplicationFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-60/2-60-instance-command-fast-1794992742917-add-requested-role-id-to-application';
+import { BackfillApplicationRequestedRoleIdSlowInstanceCommand } from 'src/database/commands/upgrade-version-command/2-60/2-60-instance-command-slow-1794992743917-backfill-application-requested-role-id';
+import { AddViewSortRelationTargetFieldMetadataIdFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-61/2-61-instance-command-fast-1795006012069-add-view-sort-relation-target-field-metadata-id';
+import { AddNavigationMenuItemBuiltInSectionKeyFastInstanceCommand } from 'src/database/commands/upgrade-version-command/2-61/2-61-instance-command-fast-1795087899814-add-navigation-menu-item-built-in-section-key';
 
 export const INSTANCE_COMMANDS = [
   AddViewFieldGroupIdIndexOnViewFieldFastInstanceCommand,
@@ -616,4 +627,15 @@ export const INSTANCE_COMMANDS = [
   AddIsInternalImportEnabledToWorkspaceSlowInstanceCommand,
   BackfillFieldMetadataOptionRowsFromStoredOptionsFastInstanceCommand,
   AddViewFieldRelationTargetFieldMetadataIdFastInstanceCommand,
+  RenameNavigationMenuItemFolderIdToParentIdFastInstanceCommand,
+  AddTabAndSectionNavigationMenuItemsFastInstanceCommand,
+  AddIsSystemSideEffectToRoleAndRoleTargetFastInstanceCommand,
+  AllowSystemSideEffectRoleTargetsPerUserWorkspaceSlowInstanceCommand,
+  AddWorkflowVersionCoreWorkflowForeignKeySlowInstanceCommand,
+  DropJobConfigFastInstanceCommand,
+  AddRequestedRoleIdToApplicationFastInstanceCommand,
+  BackfillApplicationRequestedRoleIdSlowInstanceCommand,
+  AddViewSortRelationTargetFieldMetadataIdFastInstanceCommand,
+  AddNavigationMenuItemBuiltInSectionKeyFastInstanceCommand,
+  AddAgentPrivacyFastInstanceCommand,
 ];

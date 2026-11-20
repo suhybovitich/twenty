@@ -43,7 +43,9 @@ type ManyToOneRelationValue<
             inverseOneToManyProperty:
               | keyof (typeof ALL_ONE_TO_MANY_METADATA_RELATIONS)[TTargetMetadataName]
               | null;
-            isNullable: null extends MetadataEntity<TSourceMetadataName>[TRelationProperty]
+            // Read off the column: one an upgrade command leaves unset is nullable even where its relation is not
+            isNullable: null extends MetadataEntity<TSourceMetadataName>[FK &
+              keyof MetadataEntity<TSourceMetadataName>]
               ? true
               : false;
             universalForeignKey: ToUniversalForeignKey<FK & string>;
@@ -66,6 +68,7 @@ export const ALL_MANY_TO_ONE_METADATA_RELATIONS = {
   agent: {
     workspace: null,
     application: null,
+    createdBy: null,
   },
   skill: {
     workspace: null,
@@ -114,12 +117,12 @@ export const ALL_MANY_TO_ONE_METADATA_RELATIONS = {
       isNullable: true,
       universalForeignKey: 'targetObjectMetadataUniversalIdentifier',
     },
-    folder: {
+    parent: {
       metadataName: 'navigationMenuItem',
-      foreignKey: 'folderId',
+      foreignKey: 'parentId',
       inverseOneToManyProperty: null,
       isNullable: true,
-      universalForeignKey: 'folderUniversalIdentifier',
+      universalForeignKey: 'parentUniversalIdentifier',
     },
     view: {
       metadataName: 'view',
@@ -643,6 +646,13 @@ export const ALL_MANY_TO_ONE_METADATA_RELATIONS = {
       isNullable: false,
       metadataName: 'fieldMetadata',
     },
+    relationTargetFieldMetadata: {
+      foreignKey: 'relationTargetFieldMetadataId',
+      universalForeignKey: 'relationTargetFieldMetadataUniversalIdentifier',
+      inverseOneToManyProperty: null,
+      isNullable: true,
+      metadataName: 'fieldMetadata',
+    },
     view: {
       foreignKey: 'viewId',
       universalForeignKey: 'viewUniversalIdentifier',
@@ -768,6 +778,13 @@ export const ALL_MANY_TO_ONE_METADATA_RELATIONS = {
   workflowVersion: {
     workspace: null,
     application: null,
+    coreWorkflow: {
+      metadataName: 'workflow',
+      foreignKey: 'coreWorkflowId',
+      inverseOneToManyProperty: null,
+      isNullable: true,
+      universalForeignKey: 'coreWorkflowUniversalIdentifier',
+    },
   },
   agentChatChannel: {
     workspace: null,
